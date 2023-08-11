@@ -1,16 +1,16 @@
 <template>
-    <div class="bg-slate-800 text-slate-200 h-full pb-20">
+    <div class="h-full pb-20 bg-slate-800 text-slate-200">
       <div class="flex flex-col space-y-5">
 
-        <div class="flex mx-auto flex-col items-center w-96 space-y-2 pt-2">
-            <h1 class="text-center text-3xl">To-do app</h1>
+        <div class="flex flex-col items-center pt-2 mx-auto space-y-2 w-96">
+            <h1 class="text-3xl text-center">To-do app</h1>
             <label v-if="inputValue" class="text-2xl" for="input">New task: {{ inputValue }}</label>
             <span v-if="disabled" class="text-red-800">Input field cannot be empty!</span>
-            <input @keyup.enter="addNewTask()" v-model.trim="inputValue" type="text" id="input" class="text-black p-4 focus:outline-none rounded-sm text-2xl" :class="{ shake: disabled }" placeholder="Do the laundry...">
-            <button @click="addNewTask()" class="p-2 text-2xl bg-orange-800 hover:bg-orange-900 active:bg-orange-950 rounded-sm transition">Add new task</button>
+            <input @keyup.enter="addNewTask()" v-model.trim="inputValue" type="text" id="input" class="p-4 text-2xl text-black rounded-sm focus:outline-none" :class="{ shake: disabled }" placeholder="Do the laundry...">
+            <button @click="addNewTask()" class="p-2 text-2xl transition bg-orange-800 rounded-sm hover:bg-orange-900 active:bg-orange-950">Add new task</button>
         </div>
 
-        <div v-for="item in tasksArray" :key="item.id" class="flex flex-col mx-auto items-start w-72 pt-2">
+        <div v-for="item in tasksArray" :key="item.id" class="flex flex-col items-start pt-2 mx-auto w-72">
 
             <div class="flex items-center space-x-5" v-if="!item.isEditing">
                 <input @click="item.isDone = !item.isDone"  :checked="item.isDone" type="checkbox" :id="item.id" class="w-7 h-7 checked:ring-black">
@@ -18,27 +18,27 @@
             </div>
 
 
-            <input v-else v-model.trim="newTitle" type="text" class="text-black p-4 focus:outline-none rounded-sm text-2xl" @keyup.enter="changeTitle(item.id,item.isEditing)">
+            <input v-else v-model.trim="newTitle" type="text" class="p-4 text-2xl text-black rounded-sm focus:outline-none" @keyup.enter="changeTitle(item.id,item.isEditing)" :class="{ shake: disabled }">
             <div class="flex pt-5">
-                <button v-if="!item.isEditing" @click="item.isEditing = !item.isEditing" class="bg-green-800 hover:bg-green-900 active:bg-green-950 transition p-1 rounded-sm mr-5 text-xl">Edit</button>
-                <button v-else @click="changeTitle(item.id,item.isEditing)" class="bg-green-800 hover:bg-green-900 active:bg-green-950 transition p-1 rounded-sm mr-5 text-xl">Confirm</button>
-                <button v-if="!item.isEditing" @click="deleteTask(item.id)" class="bg-red-800 hover:bg-red-900 active:bg-red-950 transition p-1 rounded-sm text-xl"> Delete</button>
-                <button v-else @click="item.isEditing = !item.isEditing"  class="bg-red-800 hover:bg-red-900 active:bg-red-950 transition p-1 rounded-sm text-xl"> Cancel</button>
+                <button v-if="!item.isEditing" @click="item.isEditing = !item.isEditing" class="p-1 mr-5 text-xl transition bg-green-800 rounded-sm hover:bg-green-900 active:bg-green-950">Edit</button>
+                <button v-else @click="changeTitle(item.id,item.isEditing)" class="p-1 mr-5 text-xl transition bg-green-800 rounded-sm hover:bg-green-900 active:bg-green-950">Confirm</button>
+                <button v-if="!item.isEditing" @click="deleteTask(item.id)" class="p-1 text-xl transition bg-red-800 rounded-sm hover:bg-red-900 active:bg-red-950"> Delete</button>
+                <button v-else @click="item.isEditing = !item.isEditing"  class="p-1 text-xl transition bg-red-800 rounded-sm hover:bg-red-900 active:bg-red-950"> Cancel</button>
             </div>
         </div>
 
-        <div v-if="tasksArray.length == 0" class="flex items-center flex-col justify-center mx-auto">
+        <div v-if="tasksArray.length == 0" class="flex flex-col items-center justify-center mx-auto">
             <p class="text-2xl"> No new tasks!  😭</p>
             <img class="max-w-[20rem]" src="../assets/sadcat.webp" alt="sad kitten">
         </div>
 
 
-        <div v-else-if="tasksArray.length !== 0 && allTasksDone" class="flex items-center flex-col justify-center mx-auto">
+        <div v-else-if="tasksArray.length !== 0 && allTasksDone" class="flex flex-col items-center justify-center mx-auto">
             <p class="text-2xl">All tasks are done! 🥳</p>
             <img class="max-w-[20rem]" src="../assets/coolcat.webp" alt="sad kitten">
         </div>
 
-        <div v-else class="flex items-center flex-col justify-center mx-auto">
+        <div v-else class="flex flex-col items-center justify-center mx-auto">
             <p class="text-2xl text-gray-700">Not all tasks are done!</p>
         </div>
 
@@ -90,13 +90,17 @@
   
   const newTitle = ref('')
   function changeTitle(id, isEditing) {
-    tasksArray.value.forEach((item) => {
+    if(newTitle.value === '') {
+        warnDisabled()
+    } else {
+      tasksArray.value.forEach((item) => {
         if(item.id === id) {
             item.title = newTitle.value;
             newTitle.value = '';
             item.isEditing = !isEditing;
         }
     })
+    }
   }
 
   //set items to LocalStorage right before the page refresh

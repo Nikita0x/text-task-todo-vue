@@ -1,10 +1,10 @@
 <template>
-  <div class="mx-auto w-[40rem] border">
-    <Tasks/>
+  <div class="mx-auto bg-black">
+    <List/>
   </div>
 </template>
 
 
 <script setup>
-import Tasks from './components/Tasks.vue'
+import List from './components/List.vue'
 </script>

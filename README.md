@@ -21,6 +21,7 @@
 
 ```sh
 git clone https://github.com/Nikita0x/text-task-todo-vue.git
+cd text-task-todo-vue
 npm install
 npm run dev
 ```

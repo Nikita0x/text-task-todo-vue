@@ -1,7 +1,29 @@
-# Vue 3 + Vite
+# Todo app for E-chat
+## _Keeping track of your things was never easier_
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Create new Todos;
+- Input validation (no empty input);
+- CRUD operations with the tasks;
+- Tasks persist even if the page is refreshed (localStorage)
+- Conditionally-rendered images;
+
+## Tech
+
+- [Vue.js]  
+- [Tailwind]
+- [Vite]
+
+## Installation
+
+```sh
+git clone https://github.com/Nikita0x/text-task-todo-vue.git
+npm install
+npm run dev
+```
+
+   [Vue.js]: <https://vuejs.org/>
+   [Tailwind]: <https://tailwindcss.com/>
+   [Vite]: <https://vitejs.dev/>

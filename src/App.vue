@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto bg-black">
+  <div class="mx-auto">
     <List/>
   </div>
 </template>

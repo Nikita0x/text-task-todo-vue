@@ -8,24 +8,31 @@
       <div v-for="item in tasksArray" :key="item.id">
         <div class="border p-2">
 
+
+          <!-- Editing mode: off -->
           <div v-if="!isEditing" class="flex space-x-3 pb-4">
             <input :id="item.id" @change="item.isDone = !item.isDone" :checked="item.isDone" type="checkbox" class="w-[70px]">
             <label :for="item.id"  :class="item.isDone ? 'line-through italic text-gray-700' : ''">{{ item.title }}</label>
-          </div>
-
-          <div v-else class="flex space-x-3 pb-4">
-            <input :id="item.id" @change="item.isDone = !item.isDone" :checked="item.isDone" type="checkbox" class="w-[70px]">
-            <button> OK</button>
-          </div>
 
           <!-- delete button -->
           <button @click="deleteTask(item.id)" class=" ml-4 bg-red-800 hover:bg-red-900 active:bg-red-950 p-1 rounded-sm transition">Delete</button>
 
           <!-- edit button -->
-          <button @click="editTitle(item.title)" class=" ml-4 bg-green-800 hover:bg-green-900 active:bg-green-950 p-1 rounded-sm transition">Edit</button>
+          <button @click="item.isEditing = !item.isEditing" class=" ml-4 bg-green-800 hover:bg-green-900 active:bg-green-950 p-1 rounded-sm transition">Edit</button>
+          <p>isEditing? {{ item.isEditing }}</p>
+          </div>
 
-          <p>is Done? {{ item.isDone }}</p>
-          <p>{{ item.id }}</p>
+          <!-- Editing mode: on -->
+          <div v-else class="flex flex-col space-x-3 pb-4">
+            <div>
+              <input @keyup.enter="editTitle(item.title, item.id)" v-model="newTitle" :id="item.id" @change="item.isDone = !item.isDone" :checked="item.isDone" type="text" class="w-[20rem] text-black">
+            </div>
+            <div class="flex">
+              <button @click="item.isEditing = !item.isEditing" class=" ml-4 bg-red-800 hover:bg-red-900 active:bg-red-950 p-1 rounded-sm transition">Cancel</button>
+              <button @click="editTitle(item.title, item.id)" class=" ml-4 bg-green-800 hover:bg-green-900 active:bg-green-950 p-1 rounded-sm transition"> OK</button>
+              <p>isEditing? {{ item.isEditing }}</p>
+            </div>  
+          </div>
         </div>
 
       </div>
@@ -43,6 +50,7 @@ function addNewTask() {
   const task = {
     id: crypto.randomUUID(),
     isDone: false,
+    isEditing: false,
     title: inputValue.value,
 }
   tasksArray.value.push(task)
@@ -62,10 +70,14 @@ function deleteTask(id) {
 }
 
 const isEditing = ref(false)
-
-function editTitle(title) {
-  isEditing.value = true;
-
+const newTitle = ref('')
+function editTitle(title, id) {
+  tasksArray.value.forEach((item) => {
+    if(item.id === id) {
+      item.title = newTitle.value;
+    }
+  })
+  isEditing.value = false;
 }
 
 </script>
